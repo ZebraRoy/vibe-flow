@@ -1,5 +1,5 @@
 export interface BaseNode<S> {
-  run: (shared: S) => Promise<string>
+  run: (shared: S) => Promise<string | undefined>
   next: <T extends BaseNode<S>>(nextNode: T, action?: string) => BaseNode<S>
   on: <T extends BaseNode<S>>(action: string, nextNode: T) => BaseNode<S>
 }
@@ -7,7 +7,7 @@ export interface BaseNode<S> {
 export interface NodeParams<P, R, S> {
   prep: (shared: S) => Promise<P>
   exec: (payload: P) => Promise<R>
-  post: (shared: S, payload: P, result: R) => Promise<string>
+  post: (shared: S, payload: P, result: R) => Promise<string | undefined>
   maxRetries?: number
   retryDelay?: number
 }
@@ -43,7 +43,7 @@ export function createNode<P, R, S>({
       const payload = await prep(shared)
       const result = await execWithRetry(payload)
       const output = await post(shared, payload, result)
-      const nextNode = successor[output]
+      const nextNode = output ? successor[output] : undefined
       if (nextNode) {
         return await nextNode.run(shared)
       }

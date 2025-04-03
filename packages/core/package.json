@@ -1,10 +1,14 @@
 {
   "name": "vibe-flow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vibe Flow",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZebraRoy/vibe-flow.git"
+  },
   "files": [
     "dist"
   ],
