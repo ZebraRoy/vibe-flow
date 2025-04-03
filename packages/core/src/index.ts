@@ -36,27 +36,25 @@ export function createNode<P, R, S>({
       throw _error
     }
   }
-  return () => {
-    const result: BaseNode<S> = {
-      run: async (shared: S) => {
-        const payload = await prep(shared)
-        const result = await execWithRetry(payload)
-        const output = await post(shared, payload, result)
-        const nextNode = successor[output]
-        if (nextNode) {
-          return await nextNode.run(shared)
-        }
-        return output
-      },
-      next: <T extends BaseNode<S>>(nextNode: T, action = "default") => {
-        successor[action] = nextNode
-        return nextNode
-      },
-      on: <T extends BaseNode<S>>(action: string, nextNode: T) => {
-        successor[action] = nextNode
-        return result
-      },
-    }
-    return result
+  const result: BaseNode<S> = {
+    run: async (shared: S) => {
+      const payload = await prep(shared)
+      const result = await execWithRetry(payload)
+      const output = await post(shared, payload, result)
+      const nextNode = successor[output]
+      if (nextNode) {
+        return await nextNode.run(shared)
+      }
+      return output
+    },
+    next: <T extends BaseNode<S>>(nextNode: T, action = "default") => {
+      successor[action] = nextNode
+      return nextNode
+    },
+    on: <T extends BaseNode<S>>(action: string, nextNode: T) => {
+      successor[action] = nextNode
+      return result
+    },
   }
+  return result
 }

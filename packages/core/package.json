@@ -1,7 +1,7 @@
 {
-  "name": "@vibe-flow/node",
+  "name": "vibe-flow",
   "version": "0.1.0",
-  "description": "Vibe Flow Node",
+  "description": "Vibe Flow",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.mjs",
