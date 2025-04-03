@@ -1,0 +1,25 @@
+{
+  "name": "vibe-flow-monorepo",
+  "description": "Vibe Flow Monorepo",
+  "version": "0.1.0",
+  "main": "index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZebraRoy/vibe-flow.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "ZebraRoy",
+  "license": "MIT",
+  "packageManager": "pnpm@10.7.0",
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=22.14.0",
+    "pnpm": ">=10.7.0"
+  }
+}
