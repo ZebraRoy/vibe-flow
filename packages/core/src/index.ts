@@ -1,7 +1,15 @@
-interface BaseNode<S> {
+export interface BaseNode<S> {
   run: (shared: S) => Promise<string>
   next: <T extends BaseNode<S>>(nextNode: T, action?: string) => BaseNode<S>
   on: <T extends BaseNode<S>>(action: string, nextNode: T) => BaseNode<S>
+}
+
+export interface NodeParams<P, R, S> {
+  prep: (shared: S) => Promise<P>
+  exec: (payload: P) => Promise<R>
+  post: (shared: S, payload: P, result: R) => Promise<string>
+  maxRetries?: number
+  retryDelay?: number
 }
 
 function sleep(ms: number) {
@@ -14,13 +22,7 @@ export function createNode<P, R, S>({
   post,
   maxRetries = 1,
   retryDelay = 0,
-}: {
-  prep: (shared: S) => Promise<P>
-  exec: (payload: P) => Promise<R>
-  post: (shared: S, payload: P, result: R) => Promise<string>
-  maxRetries?: number
-  retryDelay?: number
-}) {
+}: NodeParams<P, R, S>) {
   let retryCount = 0
   const successor: Partial<Record<string, BaseNode<S>>> = {}
   const execWithRetry = async (payload: P) => {
