@@ -2,24 +2,43 @@
   "name": "vibe-flow-monorepo",
   "description": "Vibe Flow Monorepo",
   "version": "0.1.0",
-  "main": "index.js",
   "type": "module",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ZebraRoy/vibe-flow.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r run dev --filter=!./packages/create-vibe-flow",
+    "clean": "pnpm -r run clean",
+    "test": "pnpm -r run test",
+    "lint": "pnpm -r run lint",
+    "format": "pnpm -r run format",
+    "preinstall": "npx only-allow pnpm",
+    "release:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "postversion": "pnpm release:changelog"
   },
-  "keywords": [],
+  "keywords": [
+    "vibe-flow",
+    "typescript",
+    "framework",
+    "javascript"
+  ],
   "author": "ZebraRoy",
   "license": "MIT",
   "packageManager": "pnpm@10.7.0",
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "conventional-changelog-cli": "^4.1.0",
+    "rimraf": "^5.0.5",
+    "turbo": "^2.0.0"
   },
   "engines": {
     "node": ">=22.14.0",
     "pnpm": ">=10.7.0"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

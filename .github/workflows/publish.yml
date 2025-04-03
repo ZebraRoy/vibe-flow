@@ -1,0 +1,121 @@
+name: Publish Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package to publish (core|create-vibe-flow|all)"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - core
+          - create-vibe-flow
+      version:
+        description: "Version to publish (patch|minor|major)"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      tag:
+        description: "Add git tag"
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.7.0
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Version and Publish
+        run: |
+          if [ "${{ github.event.inputs.package }}" = "all" ]; then
+            # Update all packages
+            pnpm -r exec -- npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+            # Update root package.json version for consistency
+            npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+            # Commit changes
+            git add .
+            git commit -m "chore: bump version to $(node -p "require('./package.json').version")"
+
+            # Tag if requested
+            if [ "${{ github.event.inputs.tag }}" = "true" ]; then
+              git tag v$(node -p "require('./package.json').version")
+              git push --tags
+            fi
+
+            git push
+
+            # Publish all packages
+            pnpm -r publish --access public
+          else
+            # Translate inputs to directory names
+            if [ "${{ github.event.inputs.package }}" = "core" ]; then
+              PACKAGE_DIR="core"
+              PACKAGE_NAME="vibe-flow"
+            elif [ "${{ github.event.inputs.package }}" = "create-vibe-flow" ]; then
+              PACKAGE_DIR="create-vibe-flow"
+              PACKAGE_NAME="create-vibe-flow"
+            fi
+
+            # Change to package directory
+            cd packages/$PACKAGE_DIR
+
+            # Update package version
+            npm version ${{ github.event.inputs.version }} --no-git-tag-version
+            PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+            # Commit changes for single package
+            git add .
+            git commit -m "chore: bump $PACKAGE_NAME version to $PACKAGE_VERSION"
+
+            # Tag if requested
+            if [ "${{ github.event.inputs.tag }}" = "true" ]; then
+              git tag $PACKAGE_NAME@$PACKAGE_VERSION
+              git push --tags
+            fi
+
+            git push
+
+            # Publish single package
+            npm publish --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -13,24 +13,24 @@ const projectTypes = [
     description: 'A command-line interface application',
     templatePath: path.resolve(__dirname, '../templates/llm-cli')
   },
-  {
-    name: 'API service',
-    value: 'api',
-    description: 'A RESTful API service',
-    templatePath: path.resolve(__dirname, '../templates/api')
-  },
-  {
-    name: 'Fullstack application',
-    value: 'fullstack',
-    description: 'A fullstack application',
-    templatePath: path.resolve(__dirname, '../templates/fullstack')
-  },
-  {
-    name: 'Electron application',
-    value: 'electron',
-    description: 'A desktop application',
-    templatePath: path.resolve(__dirname, '../templates/electron')
-  }
+  // {
+  //   name: 'API service',
+  //   value: 'api',
+  //   description: 'A RESTful API service',
+  //   templatePath: path.resolve(__dirname, '../templates/api')
+  // },
+  // {
+  //   name: 'Fullstack application',
+  //   value: 'fullstack',
+  //   description: 'A fullstack application',
+  //   templatePath: path.resolve(__dirname, '../templates/fullstack')
+  // },
+  // {
+  //   name: 'Electron application',
+  //   value: 'electron',
+  //   description: 'A desktop application',
+  //   templatePath: path.resolve(__dirname, '../templates/electron')
+  // }
 ]
 program
   .name("create-vibe-flow")
