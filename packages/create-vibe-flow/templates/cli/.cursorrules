@@ -1,0 +1,4 @@
+# General Vibe Coding
+
+- Always update design document first if the code related to the design document.
+- When added a new library, please make sure you have: 1. checked the package manager using of this project; 2. search the api on web;
