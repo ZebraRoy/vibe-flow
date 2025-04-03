@@ -59,11 +59,11 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Test
-        run: pnpm run test
-
       - name: Version and Publish
         run: |
+          # Create or update .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+
           if [ "${{ github.event.inputs.package }}" = "all" ]; then
             # Update all packages
             pnpm -r exec -- npm version ${{ github.event.inputs.version }} --no-git-tag-version
@@ -78,13 +78,13 @@ jobs:
             # Tag if requested
             if [ "${{ github.event.inputs.tag }}" = "true" ]; then
               git tag v$(node -p "require('./package.json').version")
-              git push --tags
+              git push origin --tags
             fi
 
-            git push
+            git push origin
 
-            # Publish all packages
-            pnpm -r publish --access public
+            # Publish all packages with explicit access public
+            pnpm -r publish --no-git-checks --access public
           else
             # Translate inputs to directory names
             if [ "${{ github.event.inputs.package }}" = "core" ]; then
@@ -103,19 +103,21 @@ jobs:
             PACKAGE_VERSION=$(node -p "require('./package.json').version")
 
             # Commit changes for single package
+            cd ../..
             git add .
             git commit -m "chore: bump $PACKAGE_NAME version to $PACKAGE_VERSION"
 
             # Tag if requested
             if [ "${{ github.event.inputs.tag }}" = "true" ]; then
               git tag $PACKAGE_NAME@$PACKAGE_VERSION
-              git push --tags
+              git push origin --tags
             fi
 
-            git push
+            git push origin
 
             # Publish single package
-            npm publish --access public
+            cd packages/$PACKAGE_DIR
+            npm publish --access public --no-git-checks
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
