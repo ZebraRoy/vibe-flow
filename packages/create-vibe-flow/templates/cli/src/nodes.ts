@@ -1,6 +1,6 @@
-import { callLlm } from './utils/callLlm'
-import { QASharedStore } from './types'
-import PromptSync from 'prompt-sync'
+import { QASharedStore } from "./types"
+import PromptSync from "prompt-sync"
+import { callLlm } from "./utils/callLlm"
 
 const prompt = PromptSync()
 
@@ -10,7 +10,7 @@ export const GetQuestionNode = {
 
   async exec(): Promise<string> {
     // Get question directly from user input
-    const userQuestion = prompt('Enter your question: ') || ''
+    const userQuestion = prompt("Enter your question: ") || ""
     return userQuestion
   },
 
@@ -21,14 +21,14 @@ export const GetQuestionNode = {
   ): Promise<string | undefined> {
     // Store the user's question
     shared.question = execRes
-    return 'default' // Go to the next node
-  }
+    return "default" // Go to the next node
+  },
 }
 
 export const AnswerNode = {
   async prep(shared: QASharedStore): Promise<string> {
     // Read question from shared
-    return shared.question || ''
+    return shared.question || ""
   },
 
   async exec(question: string): Promise<string> {
@@ -44,5 +44,5 @@ export const AnswerNode = {
     // Store the answer in shared
     shared.answer = execRes
     return undefined
-  }
+  },
 }

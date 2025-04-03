@@ -1,5 +1,5 @@
-import { createFlow } from 'vibe-flow'
-import { GetQuestionNode, AnswerNode } from './nodes'
+import { createNode } from "vibe-flow"
+import { GetQuestionNode, AnswerNode } from "./nodes"
 
 export function createQaFlow() {
   // Create nodes
@@ -10,5 +10,5 @@ export function createQaFlow() {
   getQuestionNode.next(answerNode)
 
   // Create flow starting with input node
-  return getQuestionNode;
+  return getQuestionNode
 }

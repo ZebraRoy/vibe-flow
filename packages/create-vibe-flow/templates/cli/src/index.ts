@@ -1,6 +1,6 @@
-import 'dotenv/config'
-import { createQaFlow } from './flow'
-import { QASharedStore } from './types'
+import "dotenv/config"
+import { createQaFlow } from "./flow"
+import { QASharedStore } from "./types"
 
 // Example main function
 async function main(): Promise<void> {
