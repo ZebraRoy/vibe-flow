@@ -1,6 +1,6 @@
 {
   "name": "create-vibe-flow",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "CLI tool to create a Vibe Flow project",
   "main": "index.js",
   "bin": {

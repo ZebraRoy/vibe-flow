@@ -67,12 +67,9 @@ interface SharedMemory {
 
 ### Node Steps
 
-> Notes for AI: Carefully decide whether to use Batch/Node/Flow.
-
 1. First Node
 
 - _Purpose_: Provide a short explanation of the node’s function
-- _Type_: Decide between Regular, Batch, or Async
 - _Steps_:
   - _prep_: Read "key" from the shared store
   - _exec_: Call the utility function
