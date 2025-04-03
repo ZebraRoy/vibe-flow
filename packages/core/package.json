@@ -15,7 +15,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
-  "keywords": [],
+  "keywords": [
+    "vibe-coding",
+    "vibe-flow",
+    "graph"
+  ],
   "author": "ZebraRoy",
   "license": "MIT",
   "packageManager": "pnpm@10.7.0",
