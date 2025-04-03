@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs-extra");
 const inquirer = require("inquirer");
 const chalk = require("chalk");
 const { program } = require("commander");
@@ -11,7 +11,7 @@ const projectTypes = [
     name: 'CLI application',
     value: 'cli',
     description: 'A command-line interface application',
-    templatePath: path.resolve(__dirname, '../templates/llm-cli')
+    templatePath: path.resolve(__dirname, '../templates/cli')
   },
   // {
   //   name: 'API service',
@@ -35,7 +35,7 @@ const projectTypes = [
 program
   .name("create-vibe-flow")
   .description("Create a new Vibe Flow project")
-  .argument("<project-name>", "The name of your project")
+  .argument("[project-name]", "The name of your project")
   .action(async (projectName) => {
     try {
       let projectDir = projectName;
@@ -58,7 +58,7 @@ program
       // 2. API service
       // 3. Fullstack application
       // 4. Electron application
-      const projectType = await inquirer.prompt([
+      const { projectType } = await inquirer.prompt([
         {
           type: 'list',
           name: 'projectType',
@@ -96,8 +96,10 @@ program
       // Create project directory
       await fs.ensureDir(targetDir);
 
+      const templatePath = projectTypes.find(type => type.value === projectType).templatePath;
+
       // Copy template
-      const templateDir = path.resolve(__dirname, projectType.templatePath);
+      const templateDir = path.resolve(__dirname, templatePath);
       console.log(chalk.blue(`Creating a new Vibe Flow project in ${chalk.green(targetDir)}...`));
 
       await fs.copy(templateDir, targetDir);
