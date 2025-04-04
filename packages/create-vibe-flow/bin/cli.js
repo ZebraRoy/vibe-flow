@@ -110,6 +110,9 @@ program
       pkgJson.name = projectDir.toLowerCase().replace(/\s+/g, '-');
       await fs.writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
 
+      // rename .gitignore.example to .gitignore
+      await fs.rename(path.join(targetDir, '.gitignore.example'), path.join(targetDir, '.gitignore'));
+
       console.log();
       console.log(chalk.green('Success!'), 'Created', chalk.cyan(projectDir), 'at', chalk.cyan(targetDir));
       console.log();
