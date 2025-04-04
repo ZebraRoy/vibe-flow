@@ -85,7 +85,7 @@ The `create-vibe-flow` package includes templates for:
 
 ## Requirements
 
-- Node.js >=22.14.0
+- Node.js >=18.20.8
 - pnpm >=10.7.0
 
 ## License
