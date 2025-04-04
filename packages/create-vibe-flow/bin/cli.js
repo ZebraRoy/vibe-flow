@@ -13,12 +13,12 @@ const projectTypes = [
     description: 'A command-line interface application',
     templatePath: path.resolve(__dirname, '../templates/cli')
   },
-  // {
-  //   name: 'API service',
-  //   value: 'api',
-  //   description: 'A RESTful API service',
-  //   templatePath: path.resolve(__dirname, '../templates/api')
-  // },
+  {
+    name: 'API service',
+    value: 'api',
+    description: 'A RESTful API service',
+    templatePath: path.resolve(__dirname, '../templates/api')
+  },
   // {
   //   name: 'Fullstack application',
   //   value: 'fullstack',

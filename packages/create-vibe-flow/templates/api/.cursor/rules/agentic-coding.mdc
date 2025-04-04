@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# General Vibe Coding
+
+- Always update design document first if the code related to the design document.
+- Add code intellisense comment whever possible
+- Check current environment (Windows, Mac, Linux) before running any scripts
+- When added a new library, please make sure you have: 1. checked the package manager using of this project; 2. search the api on web;
