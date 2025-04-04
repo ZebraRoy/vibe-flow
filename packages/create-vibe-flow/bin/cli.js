@@ -19,12 +19,12 @@ const projectTypes = [
     description: 'A RESTful API service',
     templatePath: path.resolve(__dirname, '../templates/api')
   },
-  // {
-  //   name: 'Fullstack application',
-  //   value: 'fullstack',
-  //   description: 'A fullstack application',
-  //   templatePath: path.resolve(__dirname, '../templates/fullstack')
-  // },
+  {
+    name: 'Fullstack application',
+    value: 'fullstack',
+    description: 'A fullstack application',
+    templatePath: path.resolve(__dirname, '../templates/fullstack')
+  },
   // {
   //   name: 'Electron application',
   //   value: 'electron',
