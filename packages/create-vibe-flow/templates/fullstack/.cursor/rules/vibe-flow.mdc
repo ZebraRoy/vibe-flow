@@ -28,8 +28,8 @@ const getQuestionNode = createNode({
   // always set the output of the node in the post function
   post: async (shared: SharedStore, _, question: string) => {
     shared.question = question;
-    // Return the next node name
-    return "answer";
+    // Return the next action name. Most of the time we should return "default" if no branching after this node
+    return "default";
   },
 });
 
@@ -42,7 +42,7 @@ const answerNode = createNode({
   },
   post: async (shared: SharedStore, _, answer: string) => {
     shared.answer = answer;
-    return "end";
+    return undefined;
   },
 });
 
@@ -96,7 +96,7 @@ const fetchDataNode = createNode<void, any, SharedState>({
   },
   post: async (shared, _, result) => {
     shared.data = result;
-    return "complete";
+    return "default";
   },
 });
 
