@@ -135,4 +135,39 @@ const runFlow = async () => {
   console.log("Flow result:", result);
   console.log("Final state:", shared);
 };
+
+// If you want to reuse the flow, you can create a flow node using `createFlow` function
+// it is mostly used if you have two flow with different shared state
+
+interface AnotherSharedState {
+  username: string;
+  isLoggedIn: boolean;
+  someOtherData: string;
+}
+
+const authFlow = createFlow({
+  // prep takes input from shared, and convert it to the shared state of the flow
+  prep: async (shared: AnotherSharedState) => {
+    return {
+      username: shared.username,
+      isLoggedIn: shared.isLoggedIn,
+    };
+  },
+  // flow takes the input from prep and returns the flow node
+  flow: () => authNode,
+  post: async (shared, payload, result) => {
+    const { result: prepRes } = payload;
+    shared.isLoggedIn = prepRes.isLoggedIn;
+    shared.username = prepRes.username;
+    return "default";
+  },
+});
+
+const shared: SharedState = {
+  username: "validUser",
+  isLoggedIn: false,
+  someOtherData: "some data",
+};
+
+await authFlow.run(shared);
 ```
