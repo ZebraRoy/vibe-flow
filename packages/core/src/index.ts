@@ -60,3 +60,31 @@ export function createNode<P, R, S>({
   }
   return result
 }
+
+export function createFlow<NS, S>({
+  prep,
+  post,
+  maxRetries,
+  retryDelay,
+  flow,
+}: NodeParams<NS, {
+  action: string | undefined
+  result: NS
+}, S> & {
+  flow: () => BaseNode<NS>
+}) {
+  return createNode({
+    prep,
+    exec: async (prepRes: NS) => {
+      const flowNode = flow()
+      const action = await flowNode.run(prepRes)
+      return {
+        action,
+        result: prepRes,
+      }
+    },
+    post,
+    maxRetries,
+    retryDelay,
+  })
+}

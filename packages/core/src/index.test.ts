@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest"
-import { createNode } from "."
+import { createNode, createFlow } from "."
 
 describe("Core", () => {
   afterEach(() => {
@@ -81,5 +81,42 @@ describe("Core", () => {
     // expect result doesn't not be resolved immediately
     expect(result).resolves.toBe("hello")
     expect(mockExec).toHaveBeenCalledTimes(2)
+  })
+  it("should be able to create a flow", async () => {
+    const mockPrep = vi.fn().mockResolvedValue({ data: "test" })
+    const mockPost = vi.fn().mockResolvedValue("success")
+
+    // Create a simple flow with a single node
+    const innerNode = createNode({
+      prep: async shared => shared,
+      exec: async () => "executed",
+      post: async () => "completed",
+    })
+
+    const flowNode = createFlow({
+      prep: mockPrep,
+      exec: async () => ({ action: undefined, result: {} }),
+      post: mockPost,
+      flow: () => innerNode,
+    })
+
+    const result = await flowNode.run({})
+
+    // Verify prep and post are called
+    expect(mockPrep).toHaveBeenCalledTimes(1)
+    expect(mockPost).toHaveBeenCalledTimes(1)
+
+    // Verify the flow returns the expected result
+    expect(result).toBe("success")
+
+    // Verify post was called with the expected arguments
+    expect(mockPost).toHaveBeenCalledWith(
+      {},
+      { data: "test" },
+      {
+        action: "completed",
+        result: { data: "test" },
+      },
+    )
   })
 })
