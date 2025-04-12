@@ -141,12 +141,14 @@ interface AnotherSharedState {
 }
 
 const authFlow = createFlow({
+  // prep takes input from shared, and convert it to the shared state of the flow
   prep: async (shared: AnotherSharedState) => {
     return {
       username: shared.username,
       isLoggedIn: shared.isLoggedIn,
     };
   },
+  // flow takes the input from prep and returns the flow node
   flow: () => authNode,
   post: async (shared, payload, result) => {
     const { result: prepRes } = payload;
